@@ -12,4 +12,6 @@ public interface Dao {
     List<Disk> getAllDisksTakenByUser(Long id);
 
     List<Disk> getAllDisksWhichWasTaken(Long id);
+
+    Disk findFreeDisk(Long id);
 }

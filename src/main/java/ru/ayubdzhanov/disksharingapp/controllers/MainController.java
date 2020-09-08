@@ -5,15 +5,21 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.CannotCreateTransactionException;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.ayubdzhanov.disksharingapp.dao.jpa.Dao;
 import ru.ayubdzhanov.disksharingapp.dao.spring.data.CredentialRepository;
+import ru.ayubdzhanov.disksharingapp.dao.spring.data.DiskRepository;
+import ru.ayubdzhanov.disksharingapp.dao.spring.data.TakenItemRepository;
 import ru.ayubdzhanov.disksharingapp.dao.spring.data.UserRepository;
 import ru.ayubdzhanov.disksharingapp.domain.Credential;
 import ru.ayubdzhanov.disksharingapp.domain.Disk;
+import ru.ayubdzhanov.disksharingapp.domain.TakenItems;
 import ru.ayubdzhanov.disksharingapp.domain.User;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -30,7 +36,13 @@ public class MainController {
     private CredentialRepository credentialRepository;
 
     @Autowired
+    private TakenItemRepository takenItemRepository;
+
+    @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private DiskRepository diskRepository;
 
     @GetMapping("/welcome")
     public ResponseEntity<?> welcome() {
@@ -73,6 +85,44 @@ public class MainController {
         return ResponseEntity.ok(takenDiskWithUser);
     }
 
+    @GetMapping("/giveBackDisk/{id}")
+    public ResponseEntity<?> giveBackDisk(@PathVariable("id") Long id) {
+        Disk borrowedDisk = diskRepository.findById(id).get();
+        if (borrowedDisk.getCurrentUser() == null) {
+            return ((ResponseEntity) ResponseEntity.badRequest());
+        }
+
+        TakenItems takenItems = takenItemRepository.findByDiskId(borrowedDisk.getId());
+
+        borrowedDisk.setCurrentUser(null);
+        takenItems.setCurrentOwner(null);
+
+        takenItemRepository.save(takenItems);
+        diskRepository.save(borrowedDisk);
+
+        return ResponseEntity.ok(Collections.EMPTY_LIST);
+    }
+
+    @GetMapping("/getFreeDisk/{id}")
+    public ResponseEntity<?> getFreeDisk(@PathVariable("id") Long id) {
+        Disk freeDisk = dao.findFreeDisk(id);
+        if (freeDisk == null) {
+            return ((ResponseEntity<?>) ResponseEntity.badRequest());
+        }
+
+        User user = userRepository.findById(currentUserId).get();
+
+        TakenItems takenItems = takenItemRepository.findByDiskId(freeDisk.getId());
+
+        freeDisk.setCurrentUser(user);
+        takenItems.setCurrentOwner(user);
+
+        dao.add(takenItems);
+        dao.add(freeDisk);
+
+        return ResponseEntity.ok(Collections.EMPTY_LIST);
+
+    }
 
 
     private void specifyCurrentUserId() {

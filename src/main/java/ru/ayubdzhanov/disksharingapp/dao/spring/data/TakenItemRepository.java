@@ -6,6 +6,5 @@ import ru.ayubdzhanov.disksharingapp.domain.TakenItems;
 import java.util.List;
 
 public interface TakenItemRepository extends JpaRepository<TakenItems, Long> {
-
-
+        TakenItems findByDiskId(Long id);
 }

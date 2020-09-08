@@ -55,4 +55,17 @@ public class DaoImpl implements Dao {
                 .setParameter("id", id);
         return list.getResultList();
     }
+
+    @Override
+    @Transactional
+    public Disk findFreeDisk(Long id) {
+        TypedQuery<Disk> list = em
+                .createQuery("SELECT d from Disk d " +
+                                "INNER JOIN TakenItems t ON d.id = t.disk.id " +
+                                "WHERE d.id = :id " +
+                                "AND t.isFree = true",
+                        Disk.class)
+                .setParameter("id", id);
+        return list.getSingleResult();
+    }
 }
