@@ -1,4 +1,4 @@
-package ru.ayubdzhanov.disksharingapp.dao;
+package ru.ayubdzhanov.disksharingapp.dao.spring.data;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import ru.ayubdzhanov.disksharingapp.domain.Credential;

@@ -48,6 +48,7 @@ public class TakenItems {
     }
 
     public void setCurrentOwner(User currentOwner) {
+        isFree = (currentOwner == null);
         this.currentOwner = currentOwner;
     }
 }

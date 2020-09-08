@@ -5,7 +5,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.ayubdzhanov.disksharingapp.dao.Dao;
+import ru.ayubdzhanov.disksharingapp.dao.jpa.Dao;
 import ru.ayubdzhanov.disksharingapp.domain.Credential;
 import ru.ayubdzhanov.disksharingapp.domain.Disk;
 import ru.ayubdzhanov.disksharingapp.domain.TakenItems;
@@ -31,6 +31,7 @@ public class BootstrapController {
         Disk firstDisk = new Disk();
         Disk secondDisk = new Disk();
         Disk thirdDisk = new Disk();
+        Disk fourthDisk = new Disk();
 
         User firstUser = new User();
         User secondUser = new User();
@@ -41,6 +42,7 @@ public class BootstrapController {
         TakenItems takenItems = new TakenItems();
         TakenItems takenItems1 = new TakenItems();
         TakenItems takenItems2 = new TakenItems();
+        TakenItems takenItems3 = new TakenItems();
 
 
         takenItems.setCurrentOwner(firstUser); //get rid of it
@@ -50,6 +52,9 @@ public class BootstrapController {
         takenItems1.setCurrentOwner(secondUser);
 
         takenItems2.setDisk(thirdDisk);
+
+        takenItems3.setDisk(fourthDisk);
+        takenItems3.setCurrentOwner(secondUser);
 
         firstUserCredential.setPassword(passwordEncoder.encode("1234"));
         firstUserCredential.setUsername("TheDanger");
@@ -61,10 +66,14 @@ public class BootstrapController {
 
         firstDisk.setName("Eternal bliss");
         firstDisk.setCurrentUser(firstUser);
-        firstDisk.setOriginalOwner(firstUser);
+        firstDisk.setOriginalOwner(secondUser); //secondUser
 
         thirdDisk.setName("Unknown hero");
         thirdDisk.setOriginalOwner(secondUser);
+
+        fourthDisk.setName("Emperor's chosen");
+        fourthDisk.setOriginalOwner(secondUser);
+        fourthDisk.setCurrentUser(secondUser);
 
         secondDisk.setOriginalOwner(secondUser);
         secondDisk.setName("Seeking truth");
@@ -84,6 +93,7 @@ public class BootstrapController {
         dao.add(takenItems);
         dao.add(takenItems1);
         dao.add(takenItems2);
+        dao.add(takenItems3);
         return ResponseEntity.ok(Collections.EMPTY_LIST);
     }
 }

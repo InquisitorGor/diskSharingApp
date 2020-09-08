@@ -10,7 +10,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import ru.ayubdzhanov.disksharingapp.dao.CredentialRepository;
+import ru.ayubdzhanov.disksharingapp.dao.spring.data.CredentialRepository;
 import ru.ayubdzhanov.disksharingapp.domain.Credential;
 
 import java.util.ArrayList;
