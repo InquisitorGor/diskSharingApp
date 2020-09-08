@@ -14,6 +14,7 @@ import ru.ayubdzhanov.disksharingapp.domain.Credential;
 import ru.ayubdzhanov.disksharingapp.domain.Disk;
 import ru.ayubdzhanov.disksharingapp.domain.User;
 
+import java.util.LinkedList;
 import java.util.List;
 
 @RestController
@@ -32,35 +33,45 @@ public class MainController {
     private UserRepository userRepository;
 
     @GetMapping("/welcome")
-    public ResponseEntity<?> welcome(){
+    public ResponseEntity<?> welcome() {
         specifyCurrentUserId();
         User user = userRepository.findById(currentUserId).get();
         return ResponseEntity.ok("Добро пожаловать " + user.getRealName());
     }
 
     @GetMapping("/getAllDisks")
-    public ResponseEntity<List<Disk>> getAllUserDisks(){
+    public ResponseEntity<List<Disk>> getAllUserDisks() {
         List<Disk> disks = userRepository.findById(currentUserId).get().getListDisk();
         return ResponseEntity.ok(disks);
     }
+
     @GetMapping("/getAllFreeDisks")
-    public ResponseEntity<List<Disk>> getAllFreeDisks(){
+    public ResponseEntity<List<Disk>> getAllFreeDisks() {
         List<Disk> freeDisks = dao.getAllFreeDisks();
         return ResponseEntity.ok(freeDisks);
     }
 
     @GetMapping("/getAllTakenDisks")
-    public ResponseEntity<List<Disk>> getAllDisksTakenByUser(){
+    public ResponseEntity<List<Disk>> getAllDisksTakenByUser() {
         List<Disk> takenDisks = dao.getAllDisksTakenByUser(currentUserId);
         return ResponseEntity.ok(takenDisks);
     }
 
     @GetMapping("/getAllDiskWhichWasTaken")
-    public ResponseEntity<List<Disk>> getAllDisksWhichWasTaken(){
+    public ResponseEntity<List<ControllerSupport>> getAllDisksWhichWasTaken() {
         List<Disk> takenDisks = dao.getAllDisksWhichWasTaken(currentUserId);
-        return ResponseEntity.ok(takenDisks);
-    }
 
+        List<ControllerSupport> takenDiskWithUser = new LinkedList<>();
+
+        takenDisks.forEach(disk -> {
+            ControllerSupport controllerSupport =
+                    new ControllerSupport(disk.getId(),
+                            disk.getName(),
+                            disk.getCurrentUser().getRealName());
+            takenDiskWithUser.add(controllerSupport);
+        });
+        return ResponseEntity.ok(takenDiskWithUser);
+    }
 
 
 

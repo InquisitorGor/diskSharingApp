@@ -66,16 +66,16 @@ public class BootstrapController {
 
         firstDisk.setName("Eternal bliss");
         firstDisk.setCurrentUser(firstUser);
-        firstDisk.setOriginalOwner(secondUser); //secondUser
+        firstDisk.setOriginalOwner(firstUser);
 
         thirdDisk.setName("Unknown hero");
-        thirdDisk.setOriginalOwner(secondUser);
+        thirdDisk.setOriginalOwner(firstUser);
 
         fourthDisk.setName("Emperor's chosen");
-        fourthDisk.setOriginalOwner(secondUser);
+        fourthDisk.setOriginalOwner(firstUser);
         fourthDisk.setCurrentUser(secondUser);
 
-        secondDisk.setOriginalOwner(secondUser);
+        secondDisk.setOriginalOwner(firstUser);
         secondDisk.setName("Seeking truth");
         secondDisk.setCurrentUser(secondUser);
 
