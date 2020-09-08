@@ -10,7 +10,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import ru.ayubdzhanov.disksharingapp.dao.CredentialRepo;
+import ru.ayubdzhanov.disksharingapp.dao.CredentialRepository;
 import ru.ayubdzhanov.disksharingapp.domain.Credential;
 
 import java.util.ArrayList;
@@ -19,20 +19,20 @@ import java.util.List;
 @Component
 public class AuthProviderImpl implements AuthenticationProvider {
 
-    private CredentialRepo credentialRepo;
+    private CredentialRepository credentialRepository;
     private PasswordEncoder passwordEncoder;
 
 
     @Autowired
-    public AuthProviderImpl(CredentialRepo credentialRepo, PasswordEncoder passwordEncoder) {
-        this.credentialRepo = credentialRepo;
+    public AuthProviderImpl(CredentialRepository credentialRepository, PasswordEncoder passwordEncoder) {
+        this.credentialRepository = credentialRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String name = authentication.getName();
-        Credential user = credentialRepo.findByUsername(name);
+        Credential user = credentialRepository.findByUsername(name);
 
         if (user == null) {
             throw new UsernameNotFoundException("User not found");

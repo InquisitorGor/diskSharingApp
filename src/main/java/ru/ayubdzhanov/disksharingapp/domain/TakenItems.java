@@ -39,6 +39,7 @@ public class TakenItems {
     }
 
     public void setDisk(Disk disk) {
+        if(currentOwner == null) isFree = true;
         this.disk = disk;
     }
 

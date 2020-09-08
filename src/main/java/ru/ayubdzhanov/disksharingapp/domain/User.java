@@ -12,8 +12,8 @@ public class User {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "username")
-    private String username;
+    @Column(name = "real_name")
+    private String realName;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "credential_id")
@@ -34,12 +34,12 @@ public class User {
         this.id = id;
     }
 
-    public String getUsername() {
-        return username;
+    public String getRealName() {
+        return realName;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setRealName(String username) {
+        this.realName = username;
     }
 
     public Credential getCredential() {

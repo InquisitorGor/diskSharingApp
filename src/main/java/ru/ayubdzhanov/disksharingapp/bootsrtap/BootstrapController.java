@@ -1,6 +1,5 @@
 package ru.ayubdzhanov.disksharingapp.bootsrtap;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,15 +11,11 @@ import ru.ayubdzhanov.disksharingapp.domain.Disk;
 import ru.ayubdzhanov.disksharingapp.domain.TakenItems;
 import ru.ayubdzhanov.disksharingapp.domain.User;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.util.Collections;
 
 @RestController
 @RequestMapping("/loadData")
 public class BootstrapController {
-
-
 
     private final Dao dao;
     private final PasswordEncoder passwordEncoder;
@@ -34,31 +29,61 @@ public class BootstrapController {
     public ResponseEntity<?> loadData(){
 
         Disk firstDisk = new Disk();
+        Disk secondDisk = new Disk();
+        Disk thirdDisk = new Disk();
 
         User firstUser = new User();
+        User secondUser = new User();
 
         Credential firstUserCredential = new Credential();
-
-
+        Credential secondUserCredential = new Credential();
 
         TakenItems takenItems = new TakenItems();
-        takenItems.setCurrentOwner(firstUser);
+        TakenItems takenItems1 = new TakenItems();
+        TakenItems takenItems2 = new TakenItems();
+
+
+        takenItems.setCurrentOwner(firstUser); //get rid of it
         takenItems.setDisk(firstDisk);
 
+        takenItems1.setDisk(secondDisk);
+        takenItems1.setCurrentOwner(secondUser);
+
+        takenItems2.setDisk(thirdDisk);
+
         firstUserCredential.setPassword(passwordEncoder.encode("1234"));
-        firstUserCredential.setUsername("egor");
+        firstUserCredential.setUsername("TheDanger");
         firstUserCredential.setUser(firstUser);
 
-        firstDisk.setName("JoJo");
+        secondUserCredential.setPassword(passwordEncoder.encode("1234"));
+        secondUserCredential.setUsername("TheOneWhoKnocks");
+        secondUserCredential.setUser(secondUser);
+
+        firstDisk.setName("Eternal bliss");
         firstDisk.setCurrentUser(firstUser);
         firstDisk.setOriginalOwner(firstUser);
 
+        thirdDisk.setName("Unknown hero");
+        thirdDisk.setOriginalOwner(secondUser);
+
+        secondDisk.setOriginalOwner(secondUser);
+        secondDisk.setName("Seeking truth");
+        secondDisk.setCurrentUser(secondUser);
+
         firstUser.getListDisk().add(firstDisk);
         firstUser.setCredential(firstUserCredential);
-        firstUser.setUsername("Jon");
+        firstUser.setRealName("Jon");
+
+        secondUser.setCredential(secondUserCredential);
+        secondUser.setRealName("Egor");
+        secondUser.getListDisk().add(secondDisk);
+        secondUser.getListDisk().add(thirdDisk);
 
         dao.add(firstUser);
+        dao.add(secondUser);
         dao.add(takenItems);
+        dao.add(takenItems1);
+        dao.add(takenItems2);
         return ResponseEntity.ok(Collections.EMPTY_LIST);
     }
 }

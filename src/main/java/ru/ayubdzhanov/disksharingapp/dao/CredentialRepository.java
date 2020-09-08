@@ -5,6 +5,6 @@ import ru.ayubdzhanov.disksharingapp.domain.Credential;
 
 import java.util.List;
 
-public interface CredentialRepo extends JpaRepository<Credential, Long> {
+public interface CredentialRepository extends JpaRepository<Credential, Long> {
     Credential findByUsername(String username);
 }
