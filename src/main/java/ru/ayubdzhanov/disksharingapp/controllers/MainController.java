@@ -53,7 +53,7 @@ public class MainController {
 
     @GetMapping("/getAllDisks")
     public ResponseEntity<List<Disk>> getAllUserDisks() {
-        List<Disk> disks = userRepository.findById(currentUserId).get().getListDisk();
+        List<Disk> disks = dao.getAllDisks(currentUserId);
         return ResponseEntity.ok(disks);
     }
 

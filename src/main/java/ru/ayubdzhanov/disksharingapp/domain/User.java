@@ -25,7 +25,6 @@ public class User {
             fetch = FetchType.EAGER)
     private List<Disk> listDisk;
 
-
     public Long getId() {
         return id;
     }
@@ -46,8 +45,14 @@ public class User {
         return credential;
     }
 
+    public void addDisk(Disk disk){
+        getListDisk().add(disk);
+        disk.setOriginalOwner(this);
+    }
+
     public void setCredential(Credential credential) {
         this.credential = credential;
+        this.credential.setUser(this);
     }
 
     public List<Disk> getListDisk() {

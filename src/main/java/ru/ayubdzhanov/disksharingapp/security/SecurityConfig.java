@@ -11,7 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
+
     private AuthProviderImpl authProvider;
 
     @Override
@@ -33,11 +33,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .disable();
     }
 
+    @Autowired
+    public void setAuthProvider(AuthProviderImpl authProvider) {
+        this.authProvider = authProvider;
+    }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(authProvider);
-
-
     }
 }

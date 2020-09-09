@@ -45,7 +45,7 @@ public class BootstrapController {
         TakenItems takenItems3 = new TakenItems();
 
 
-        takenItems.setCurrentOwner(firstUser); //get rid of it
+        takenItems.setCurrentOwner(firstUser);
         takenItems.setDisk(firstDisk);
 
         takenItems1.setDisk(secondDisk);
@@ -54,39 +54,33 @@ public class BootstrapController {
         takenItems2.setDisk(thirdDisk);
 
         takenItems3.setDisk(fourthDisk);
-        takenItems3.setCurrentOwner(secondUser);
 
         firstUserCredential.setPassword(passwordEncoder.encode("1234"));
         firstUserCredential.setUsername("TheDanger");
-        firstUserCredential.setUser(firstUser);
 
         secondUserCredential.setPassword(passwordEncoder.encode("1234"));
         secondUserCredential.setUsername("TheOneWhoKnocks");
-        secondUserCredential.setUser(secondUser);
 
         firstDisk.setName("Eternal bliss");
-        firstDisk.setCurrentUser(firstUser);
-        firstDisk.setOriginalOwner(firstUser);
+        firstDisk.setCurrentUser(secondUser);
 
         thirdDisk.setName("Unknown hero");
-        thirdDisk.setOriginalOwner(firstUser);
 
         fourthDisk.setName("Emperor's chosen");
-        fourthDisk.setOriginalOwner(firstUser);
-        fourthDisk.setCurrentUser(secondUser);
 
-        secondDisk.setOriginalOwner(firstUser);
         secondDisk.setName("Seeking truth");
-        secondDisk.setCurrentUser(secondUser);
+        secondDisk.setCurrentUser(firstUser);
 
-        firstUser.getListDisk().add(firstDisk);
+
+        firstUser.addDisk(fourthDisk);
+        firstUser.addDisk(firstDisk);
         firstUser.setCredential(firstUserCredential);
         firstUser.setRealName("Jon");
 
         secondUser.setCredential(secondUserCredential);
         secondUser.setRealName("Egor");
-        secondUser.getListDisk().add(secondDisk);
-        secondUser.getListDisk().add(thirdDisk);
+        secondUser.addDisk(secondDisk);
+        secondUser.addDisk(thirdDisk);
 
         dao.add(firstUser);
         dao.add(secondUser);
@@ -94,6 +88,7 @@ public class BootstrapController {
         dao.add(takenItems1);
         dao.add(takenItems2);
         dao.add(takenItems3);
+
         return ResponseEntity.ok(Collections.EMPTY_LIST);
     }
 }

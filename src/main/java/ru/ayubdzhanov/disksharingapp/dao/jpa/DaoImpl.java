@@ -23,11 +23,22 @@ public class DaoImpl implements Dao {
 
     @Override
     @Transactional
+    public List<Disk> getAllDisks(Long id) {
+        TypedQuery<Disk> list = em
+                .createQuery("SELECT d from Disk d " +
+                                "WHERE d.originalOwner.id = :id",
+                        Disk.class)
+                .setParameter("id", id);
+        return list.getResultList();
+    }
+
+    @Override
+    @Transactional
     public List<Disk> getAllFreeDisks() {
         TypedQuery<Disk> list = em
                 .createQuery("SELECT d from Disk d " +
-                        "INNER JOIN TakenItems t ON t.disk.id = d.id " +
-                        "WHERE t.isFree = true",
+                                "INNER JOIN TakenItems t ON t.disk.id = d.id " +
+                                "WHERE t.isFree = true",
                         Disk.class);
         return list.getResultList();
     }

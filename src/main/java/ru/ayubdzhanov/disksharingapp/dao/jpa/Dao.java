@@ -7,6 +7,8 @@ import java.util.List;
 public interface Dao {
     void add(Object obj);
 
+    List<Disk> getAllDisks(Long id);
+
     List<Disk> getAllFreeDisks();
 
     List<Disk> getAllDisksTakenByUser(Long id);
