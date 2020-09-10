@@ -72,7 +72,6 @@ public class MainController {
     @GetMapping("/getAllDiskWhichWasTaken")
     public ResponseEntity<List<ControllerSupport>> getAllDisksWhichWasTaken() {
         List<Disk> takenDisks = dao.getAllDisksWhichWasTaken(currentUserId);
-
         List<ControllerSupport> takenDiskWithUser = new LinkedList<>();
 
         takenDisks.forEach(disk -> {
@@ -85,11 +84,50 @@ public class MainController {
         return ResponseEntity.ok(takenDiskWithUser);
     }
 
+    static class ControllerSupport {
+        private Long id;
+        private String name;
+        private String realName;
+
+        public ControllerSupport(Long id, String name, String realName) {
+            this.id = id;
+            this.name = name;
+            this.realName = realName;
+        }
+
+        public Long getId() {
+            return id;
+        }
+
+        public void setId(Long id) {
+            this.id = id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getRealName() {
+            return realName;
+        }
+
+        public void setRealName(String realName) {
+            this.realName = realName;
+        }
+    }
+
     @GetMapping("/giveBackDisk/{id}")
     public ResponseEntity<?> giveBackDisk(@PathVariable("id") Long id) {
-        Disk borrowedDisk = diskRepository.findById(id).get();
+        Disk borrowedDisk = dao.getDisk(id);
         if (borrowedDisk.getCurrentUser() == null) {
-            return ResponseEntity.badRequest().body(Collections.EMPTY_LIST);
+            return ResponseEntity.badRequest().body("This disk is free");
+        }
+        if(!borrowedDisk.getCurrentUser().getId().equals(currentUserId)) {
+            return ResponseEntity.badRequest().body("This disk belongs to another user");
         }
 
         TakenItems takenItems = takenItemRepository.findByDiskId(borrowedDisk.getId());
@@ -106,8 +144,9 @@ public class MainController {
     @GetMapping("/getFreeDisk/{id}")
     public ResponseEntity<?> getFreeDisk(@PathVariable("id") Long id) {
         Disk freeDisk = dao.findFreeDisk(id);
-        if (freeDisk == null) {
-            return ((ResponseEntity<?>) ResponseEntity.badRequest());
+
+        if(freeDisk == null) {
+            return ResponseEntity.badRequest().body("This disk is not free");
         }
 
         User user = userRepository.findById(currentUserId).get();

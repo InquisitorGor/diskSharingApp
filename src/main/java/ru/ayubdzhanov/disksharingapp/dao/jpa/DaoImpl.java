@@ -6,6 +6,7 @@ import ru.ayubdzhanov.disksharingapp.domain.Disk;
 import ru.ayubdzhanov.disksharingapp.domain.TakenItems;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.List;
@@ -74,6 +75,21 @@ public class DaoImpl implements Dao {
                                 "INNER JOIN TakenItems t ON d.id = t.disk.id " +
                                 "WHERE d.id = :id " +
                                 "AND t.isFree = true",
+                        Disk.class)
+                .setParameter("id", id);
+        try {
+            return list.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
+    @Override
+    @Transactional
+    public Disk getDisk(Long id) {
+        TypedQuery<Disk> list = em
+                .createQuery("SELECT d from Disk d " +
+                                "WHERE d.id = :id ",
                         Disk.class)
                 .setParameter("id", id);
         return list.getSingleResult();
