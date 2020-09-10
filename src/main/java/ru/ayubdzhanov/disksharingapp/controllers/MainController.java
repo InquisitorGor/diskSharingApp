@@ -89,7 +89,7 @@ public class MainController {
     public ResponseEntity<?> giveBackDisk(@PathVariable("id") Long id) {
         Disk borrowedDisk = diskRepository.findById(id).get();
         if (borrowedDisk.getCurrentUser() == null) {
-            return ((ResponseEntity) ResponseEntity.badRequest());
+            return ResponseEntity.badRequest().body(Collections.EMPTY_LIST);
         }
 
         TakenItems takenItems = takenItemRepository.findByDiskId(borrowedDisk.getId());

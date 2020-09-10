@@ -48,8 +48,7 @@ public class DaoImpl implements Dao {
     public List<Disk> getAllDisksTakenByUser(Long id) {
         TypedQuery<Disk> list = em
                 .createQuery("SELECT d from Disk d " +
-                                "INNER JOIN TakenItems t ON t.disk.id = d.id " +
-                                "WHERE t.currentOwner.id = :id",
+                                "WHERE d.currentUser.id = :id",
                         Disk.class)
                 .setParameter("id", id);
         return list.getResultList();
