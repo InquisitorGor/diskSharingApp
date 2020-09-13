@@ -3,7 +3,6 @@ package ru.ayubdzhanov.disksharingapp.dao.jpa;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.ayubdzhanov.disksharingapp.domain.Disk;
-import ru.ayubdzhanov.disksharingapp.domain.TakenItems;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
