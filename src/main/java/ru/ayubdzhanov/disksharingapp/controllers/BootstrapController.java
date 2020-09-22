@@ -1,4 +1,4 @@
-package ru.ayubdzhanov.disksharingapp.bootsrtap;
+package ru.ayubdzhanov.disksharingapp.controllers;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;

@@ -146,10 +146,14 @@ public class MainController {
         Disk freeDisk = dao.findFreeDisk(id);
 
         if(freeDisk == null) {
-            return ResponseEntity.badRequest().body("This disk is not free");
+            return ResponseEntity.badRequest().body("Hold ur horses. This disk is not free");
         }
 
         User user = userRepository.findById(currentUserId).get();
+
+        if(freeDisk.getOriginalOwner().getId().equals(user.getId())) {
+            return ResponseEntity.badRequest().body("Bro, chill. This disk is yours");
+        }
 
         TakenItems takenItems = takenItemRepository.findByDiskId(freeDisk.getId());
 
