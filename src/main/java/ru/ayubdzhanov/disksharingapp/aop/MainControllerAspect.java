@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 import ru.ayubdzhanov.disksharingapp.domain.Credential;
 
@@ -17,8 +18,8 @@ public class MainControllerAspect {
 
     @Around("execution(* ru.ayubdzhanov.disksharingapp.controllers.MainController.*(..))")
     public ResponseEntity<?> logAround(ProceedingJoinPoint joinPoint) throws Throwable {
-        Credential credential = ((Credential) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-        logger.info("Method " + joinPoint.getSignature().getName() + "was started by" + credential.getUsername());
+        User user = ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        logger.info("Method " + joinPoint.getSignature().getName() + "was started by" + user.getUsername());
         ResponseEntity<?> responseEntity = (ResponseEntity<?>) joinPoint.proceed();
         logger.info("Method " + joinPoint.getSignature().getName() + " ended");
         return responseEntity;

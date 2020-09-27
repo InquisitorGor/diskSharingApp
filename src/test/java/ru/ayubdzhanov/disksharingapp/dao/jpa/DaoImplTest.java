@@ -19,6 +19,9 @@ import ru.ayubdzhanov.disksharingapp.domain.User;
 
 import javax.persistence.EntityManager;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -120,8 +123,6 @@ class DaoImplTest {
         secondUserId = secondUser.getId();
     }
 
-
-
     @Test
     void addTest() {
         User user = new User();
@@ -188,6 +189,7 @@ class DaoImplTest {
     void getAllDisksWhichWasTakenTest() {
         List<Disk> firstUserDiskList = dao.getAllDisksWhichWasTaken(firstUserId);
         List<Disk> secondUserDiskList = dao.getAllDisksWhichWasTaken(secondUserId);
+
 
         assertThat(firstUserDiskList.size()).isEqualTo(1);
         assertThat(firstUserDiskList.get(0).getName()).isEqualTo("Eternal bliss");

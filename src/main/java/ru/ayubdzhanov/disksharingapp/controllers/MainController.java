@@ -3,6 +3,7 @@ package ru.ayubdzhanov.disksharingapp.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.transaction.CannotCreateTransactionException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -169,7 +170,7 @@ public class MainController {
 
 
     private void specifyCurrentUserId() {
-        Credential credential = ((Credential) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        UserDetails credential = ((org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         String userName = null;
 
         if (credential != null) {

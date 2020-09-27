@@ -57,9 +57,11 @@ public class BootstrapController {
 
         firstUserCredential.setPassword(passwordEncoder.encode("1234"));
         firstUserCredential.setUsername("TheDanger");
+        firstUserCredential.setRole("USER");
 
         secondUserCredential.setPassword(passwordEncoder.encode("1234"));
         secondUserCredential.setUsername("TheOneWhoKnocks");
+        secondUserCredential.setRole("USER");
 
         firstDisk.setName("Eternal bliss");
         firstDisk.setCurrentUser(secondUser);

@@ -14,6 +14,8 @@ public class Credential {
 
     private String password;
 
+    private String role;
+
     @OneToOne(mappedBy = "credential")
     private User user;
 
@@ -23,6 +25,14 @@ public class Credential {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public String getUsername() {
