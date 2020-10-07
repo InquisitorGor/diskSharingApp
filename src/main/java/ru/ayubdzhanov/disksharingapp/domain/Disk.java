@@ -15,16 +15,8 @@ public class Disk {
     @Column(name = "name")
     private String name;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JsonIgnore
-    @JoinColumn(name = "current_user_id")
-    private User currentUser;
-
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JsonIgnore
-    @JoinColumn(name = "original_owner_id")
-    private User originalOwner;
-
+    @OneToOne(mappedBy = "disk")
+    private TakenItems takenItems;
 
     public Long getId() {
         return id;
@@ -42,20 +34,11 @@ public class Disk {
         this.name = name;
     }
 
-    public User getCurrentUser() {
-        return currentUser;
+    public TakenItems getTakenItems() {
+        return takenItems;
     }
 
-    public void setCurrentUser(User currentUser) {
-        this.currentUser = currentUser;
+    public void setTakenItems(TakenItems takenItems) {
+        this.takenItems = takenItems;
     }
-
-    public User getOriginalOwner() {
-        return originalOwner;
-    }
-
-    public void setOriginalOwner(User originalOwner) {
-        this.originalOwner = originalOwner;
-    }
-
 }

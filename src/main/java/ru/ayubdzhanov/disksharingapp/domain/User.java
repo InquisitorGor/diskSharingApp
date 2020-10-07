@@ -21,9 +21,16 @@ public class User {
 
     @OneToMany(cascade = CascadeType.ALL,
             orphanRemoval = true,
-            mappedBy = "currentUser",
+            mappedBy = "originalOwner",
             fetch = FetchType.EAGER)
-    private List<Disk> listDisk  ; //test
+    private List<TakenItems> listOfCurrentDisks;
+
+    @OneToMany(cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            mappedBy = "currentOwner",
+            fetch = FetchType.EAGER)
+    private List<TakenItems> listOfTakenDisks;
+
 
     public Long getId() {
         return id;
@@ -37,17 +44,28 @@ public class User {
         return realName;
     }
 
-    public void setRealName(String username) {
-        this.realName = username;
+    public void setRealName(String realName) {
+        this.realName = realName;
+    }
+
+    public List<TakenItems> getListOfCurrentDisks() {
+        return listOfCurrentDisks;
+    }
+
+    public void setListOfCurrentDisks(List<TakenItems> listOfCurrentDisks) {
+        this.listOfCurrentDisks = listOfCurrentDisks;
+    }
+
+    public List<TakenItems> getListOfTakenDisks() {
+        return listOfTakenDisks;
+    }
+
+    public void setListOfTakenDisks(List<TakenItems> listOfTakenDisks) {
+        this.listOfTakenDisks = listOfTakenDisks;
     }
 
     public Credential getCredential() {
         return credential;
-    }
-
-    public void addDisk(Disk disk){
-        getListDisk().add(disk);
-        disk.setOriginalOwner(this);
     }
 
     public void setCredential(Credential credential) {
@@ -55,13 +73,4 @@ public class User {
         this.credential.setUser(this);
     }
 
-    public List<Disk> getListDisk() {
-        if(listDisk == null) listDisk = new LinkedList<>();
-        return listDisk;
-    }
-
-
-    public void setListDisk(List<Disk> listDisk) {
-        this.listDisk = listDisk;
-    }
 }

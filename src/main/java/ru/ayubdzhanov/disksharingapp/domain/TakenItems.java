@@ -13,13 +13,17 @@ public class TakenItems {
     @Column(name = "is_free")
     private boolean isFree;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "disk_id")
     private Disk disk;
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
-    private User currentOwner;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "original_owner_id")
+    private User originalOwner;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "current_owner_id")
+    private User currentOwner;
 
 
     public void setId(Long id) {
@@ -34,13 +38,16 @@ public class TakenItems {
         isFree = free;
     }
 
-    public Disk getDisk() {
-        return disk;
+    public Long getId() {
+        return id;
     }
 
-    public void setDisk(Disk disk) {
-        if(currentOwner == null) isFree = true;
-        this.disk = disk;
+    public User getOriginalOwner() {
+        return originalOwner;
+    }
+
+    public void setOriginalOwner(User originalOwner) {
+        this.originalOwner = originalOwner;
     }
 
     public User getCurrentOwner() {
@@ -48,7 +55,14 @@ public class TakenItems {
     }
 
     public void setCurrentOwner(User currentOwner) {
-        isFree = (currentOwner == null);
         this.currentOwner = currentOwner;
+    }
+
+    public Disk getDisk() {
+        return disk;
+    }
+
+    public void setDisk(Disk disk) {
+        this.disk = disk;
     }
 }
