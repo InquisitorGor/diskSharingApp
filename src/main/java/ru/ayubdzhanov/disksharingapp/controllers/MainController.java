@@ -1,27 +1,12 @@
 package ru.ayubdzhanov.disksharingapp.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.transaction.CannotCreateTransactionException;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.ayubdzhanov.disksharingapp.dao.jpa.Dao;
-import ru.ayubdzhanov.disksharingapp.dao.spring.data.CredentialRepository;
-import ru.ayubdzhanov.disksharingapp.dao.spring.data.DiskRepository;
-import ru.ayubdzhanov.disksharingapp.dao.spring.data.TakenItemRepository;
-import ru.ayubdzhanov.disksharingapp.dao.spring.data.UserRepository;
-import ru.ayubdzhanov.disksharingapp.domain.Credential;
+import ru.ayubdzhanov.disksharingapp.dao.Dao;
 import ru.ayubdzhanov.disksharingapp.domain.Disk;
-import ru.ayubdzhanov.disksharingapp.domain.TakenItems;
-import ru.ayubdzhanov.disksharingapp.domain.User;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 
 @RestController
@@ -30,43 +15,35 @@ public class MainController {
 
     private Long currentUserId;
 
-    @Autowired
-    private Dao dao;
+    private final Dao dao;
 
-    @Autowired
-    private CredentialRepository credentialRepository;
-
-    @Autowired
-    private TakenItemRepository takenItemRepository;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private DiskRepository diskRepository;
-
-    @GetMapping("/welcome")
-    public ResponseEntity<?> welcome() {
-        specifyCurrentUserId();
-        User user = userRepository.findById(currentUserId).get();
-        return ResponseEntity.ok("Добро пожаловать " + user.getRealName());
+    public MainController(Dao dao) {
+        this.dao = dao;
     }
+
+
+//    @GetMapping("/welcome")
+//    public ResponseEntity<?> welcome() {
+//        specifyCurrentUserId();
+//        User user = userRepository.findById(currentUserId).get();
+//        return ResponseEntity.ok("Добро пожаловать " + user.getRealName());
+//    }
 
     @GetMapping("/getAllDisks")
     public ResponseEntity<List<Disk>> getAllUserDisks() {
-        List<Disk> disks = dao.getAllDisks(currentUserId);
+        List<Disk> disks = dao.getDisks(currentUserId);
         return ResponseEntity.ok(disks);
     }
 
     @GetMapping("/getAllFreeDisks")
     public ResponseEntity<List<Disk>> getAllFreeDisks() {
-        List<Disk> freeDisks = dao.getAllFreeDisks();
+        List<Disk> freeDisks = dao.getFreeDisks();
         return ResponseEntity.ok(freeDisks);
     }
 
     @GetMapping("/getAllTakenDisks")
     public ResponseEntity<List<Disk>> getAllDisksTakenByUser() {
-        List<Disk> takenDisks = dao.getAllDisksTakenByUser(currentUserId);
+        List<Disk> takenDisks = dao.getDisksTakenByCurrentUser(currentUserId);
         return ResponseEntity.ok(takenDisks);
     }
 
@@ -169,22 +146,22 @@ public class MainController {
 //    }
 
 
-    private void specifyCurrentUserId() {
-        UserDetails credential = ((org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-        String userName = null;
-
-        if (credential != null) {
-
-            userName = credential.getUsername();
-
-            try {
-                this.currentUserId = credentialRepository.findByUsername(userName)
-                        .getId();
-            } catch (CannotCreateTransactionException ignored) {
-                System.out.println("Something went wrong");
-            }
-        }
-    }
+//    private void specifyCurrentUserId() {
+//        UserDetails credential = ((org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+//        String userName = null;
+//
+//        if (credential != null) {
+//
+//            userName = credential.getUsername();
+//
+//            try {
+//                this.currentUserId = credentialRepository.findByUsername(userName)
+//                        .getId();
+//            } catch (CannotCreateTransactionException ignored) {
+//                System.out.println("Something went wrong");
+//            }
+//        }
+//    }
 }
 
 

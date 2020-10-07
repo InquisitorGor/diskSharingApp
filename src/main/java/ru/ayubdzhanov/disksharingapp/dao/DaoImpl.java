@@ -1,4 +1,4 @@
-package ru.ayubdzhanov.disksharingapp.dao.jpa;
+package ru.ayubdzhanov.disksharingapp.dao;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,10 +23,11 @@ public class DaoImpl implements Dao {
 
     @Override
     @Transactional
-    public List<Disk> getAllDisks(Long id) {
+    public List<Disk> getDisks(Long id) {
         TypedQuery<Disk> list = em
-                .createQuery("SELECT d from Disk d " +
-                                "WHERE d.originalOwner.id = :id",
+                .createQuery("SELECT d FROM Disk d " +
+                                "JOIN TakenItems t ON d.id = t.disk.id " +
+                                "WHERE t.originalOwner.id = :id",
                         Disk.class)
                 .setParameter("id", id);
         return list.getResultList();
@@ -34,10 +35,10 @@ public class DaoImpl implements Dao {
 
     @Override
     @Transactional
-    public List<Disk> getAllFreeDisks() {
+    public List<Disk> getFreeDisks() {
         TypedQuery<Disk> list = em
                 .createQuery("SELECT d from Disk d " +
-                                "INNER JOIN TakenItems t ON t.disk.id = d.id " +
+                                "JOIN TakenItems t ON t.disk.id = d.id " +
                                 "WHERE t.isFree = true",
                         Disk.class);
         return list.getResultList();
@@ -45,10 +46,11 @@ public class DaoImpl implements Dao {
 
     @Override
     @Transactional
-    public List<Disk> getAllDisksTakenByUser(Long id) {
+    public List<Disk> getDisksTakenByCurrentUser(Long id) {
         TypedQuery<Disk> list = em
                 .createQuery("SELECT d from Disk d " +
-                                "WHERE d.currentUser.id = :id",
+                                "JOIN TakenItems t ON t.disk.id = d.id " +
+                                "WHERE t.currentOwner.id = :id",
                         Disk.class)
                 .setParameter("id", id);
         return list.getResultList();
@@ -56,11 +58,12 @@ public class DaoImpl implements Dao {
 
     @Override
     @Transactional
-    public List<Disk> getAllDisksWhichWasTaken(Long id) {
+    public List<Disk> getDisksWhichWasTakenFromUser(Long id) {
         TypedQuery<Disk> list = em
                 .createQuery("SELECT d from Disk d " +
-                                "WHERE d.originalOwner.id = :id " +
-                                "AND d.currentUser.id <> d.originalOwner.id",
+                                "JOIN TakenItems t ON t.disk.id = d.id " +
+                                "WHERE t.originalOwner.id = :id " +
+                                "AND t.isFree = false",
                         Disk.class)
                 .setParameter("id", id);
         return list.getResultList();

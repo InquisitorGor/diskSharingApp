@@ -41,4 +41,12 @@ public class Disk {
     public void setTakenItems(TakenItems takenItems) {
         this.takenItems = takenItems;
     }
+
+    @Override
+    public String toString() {
+        return "Disk{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }
