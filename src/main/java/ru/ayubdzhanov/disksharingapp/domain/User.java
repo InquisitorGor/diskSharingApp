@@ -23,7 +23,7 @@ public class User {
             orphanRemoval = true,
             mappedBy = "currentUser",
             fetch = FetchType.EAGER)
-    private List<Disk> listDisk;
+    private List<Disk> listDisk  ; //test
 
     public Long getId() {
         return id;
