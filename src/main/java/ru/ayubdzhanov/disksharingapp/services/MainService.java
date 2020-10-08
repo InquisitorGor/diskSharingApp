@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface MainService {
 
-    User getUserById(Long currentUserId);
+    User getUserById();
 
     List<Disk> getAllUserDisks();
 
@@ -21,6 +21,8 @@ public interface MainService {
     void freeDiskFromCurrentOwner(Long id) throws Exception;
 
     void setDiskCurrentOwner(Long id) throws Exception;
+
+    void specifyCurrentUserId();
 
 
 

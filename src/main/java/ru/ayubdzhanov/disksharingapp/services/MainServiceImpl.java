@@ -39,7 +39,7 @@ public class MainServiceImpl implements MainService {
     }
 
     @Override
-    public User getUserById(Long currentUserId) {
+    public User getUserById() {
         return userDao.findById(currentUserId);
     }
 
@@ -113,11 +113,28 @@ public class MainServiceImpl implements MainService {
         takenItemsDao.save(takenItems);
     }
 
-    public void setCurrentUserId(Long currentUserId) {
-        this.currentUserId = currentUserId;
+    public void specifyCurrentUserId() {
+        UserDetails credential = ((org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        String userName = null;
+
+        if (credential != null) {
+
+            userName = credential.getUsername();
+
+            try {
+                this.currentUserId = credentialDao.findByUsername(userName)
+                        .getId();
+            } catch (CannotCreateTransactionException ignored) {
+                System.out.println("Something went wrong");
+            }
+        }
     }
 
-    static class ControllerSupport {
+    public Long getCurrentUserId() {
+        return currentUserId;
+    }
+
+    public static class ControllerSupport {
         private Long id;
         private String name;
         private String realName;
