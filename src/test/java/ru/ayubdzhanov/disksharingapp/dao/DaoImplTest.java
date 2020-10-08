@@ -1,21 +1,16 @@
 package ru.ayubdzhanov.disksharingapp.dao;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringRunner;
-import ru.ayubdzhanov.disksharingapp.dao.Dao;
-import ru.ayubdzhanov.disksharingapp.dao.DaoImpl;
 import ru.ayubdzhanov.disksharingapp.domain.Disk;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @RunWith(SpringRunner.class)
@@ -26,8 +21,8 @@ public class DaoImplTest {
     @Autowired
     private Dao dao;
 
-    private Long firstUserId = 1L;
-    private Long secondUserId = 2L;
+    private final Long firstUserId = 1L;
+    private final Long secondUserId = 2L;
 
     @TestConfiguration
     static class DaoImplTestConfiguration {

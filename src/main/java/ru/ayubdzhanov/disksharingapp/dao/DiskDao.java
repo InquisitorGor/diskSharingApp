@@ -4,8 +4,9 @@ import ru.ayubdzhanov.disksharingapp.domain.Disk;
 
 import java.util.List;
 
-public interface Dao {
-    void add(Object obj);
+public interface DiskDao {
+
+    Disk save(Disk disk);
 
     List<Disk> getDisks(Long id);
 
