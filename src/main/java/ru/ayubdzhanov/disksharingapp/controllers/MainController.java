@@ -28,7 +28,11 @@ import java.util.List;
 public class MainController {
 
 
-    private MainService service;
+    private final MainService service;
+
+    public MainController(MainService service) {
+        this.service = service;
+    }
 
     @GetMapping("/welcome")
     public ResponseEntity<?> welcome() {
