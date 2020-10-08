@@ -11,14 +11,20 @@ import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Repository
-public class DaoImpl implements Dao {
+public class DiskDaoImpl implements DiskDao {
+
     @PersistenceContext
     private EntityManager em;
 
     @Override
     @Transactional
-    public void add(Object obj) {
-        em.persist(obj);
+    public Disk save(Disk disk) {
+        if (disk.getId() == null) {
+            em.persist(disk);
+        } else {
+            em.merge(disk);
+        }
+        return disk;
     }
 
     @Override
@@ -74,7 +80,7 @@ public class DaoImpl implements Dao {
     public Disk findFreeDisk(Long id) {
         TypedQuery<Disk> list = em
                 .createQuery("SELECT d from Disk d " +
-                                "INNER JOIN TakenItems t ON d.id = t.disk.id " +
+                                "JOIN TakenItems t ON d.id = t.disk.id " +
                                 "WHERE d.id = :id " +
                                 "AND t.isFree = true",
                         Disk.class)
