@@ -40,29 +40,27 @@ public class MainController {
         return ResponseEntity.ok("Добро пожаловать " + service.getUserById().getRealName());
     }
 
-    @GetMapping("/getAllDisks")
+    @GetMapping("/disks")
     public ResponseEntity<List<Disk>> getAllUserDisks() {
         return ResponseEntity.ok(service.getAllUserDisks());
     }
 
-    @GetMapping("/getAllFreeDisks")
+    @GetMapping("/disks/free")
     public ResponseEntity<List<Disk>> getAllFreeDisks() {
         return ResponseEntity.ok(service.getAllFreeDisks());
     }
 
-    @GetMapping("/getAllTakenDisks")
+    @GetMapping("/disks/taken_by_user")
     public ResponseEntity<List<Disk>> getAllDisksTakenByUser() {
         return ResponseEntity.ok(service.getAllDisksTakenByUser());
     }
 
-    @GetMapping("/getAllDiskWhichWasTaken")
+    @GetMapping("/disks/taken_from_user")
     public ResponseEntity<List<MainServiceImpl.ControllerSupport>> getAllDisksWhichWasTaken() {
         return ResponseEntity.ok(service.getAllDisksWhichWasTaken());
     }
 
-
-
-    @GetMapping("/giveBackDisk/{id}")
+    @GetMapping("/disk/return/{id}")
     public ResponseEntity<?> giveBackDisk(@PathVariable("id") Long id) {
 
         try {
@@ -73,7 +71,7 @@ public class MainController {
         return ResponseEntity.ok(Collections.EMPTY_LIST);
     }
 
-    @GetMapping("/getFreeDisk/{id}")
+    @GetMapping("/disk/take/{id}")
     public ResponseEntity<?> getFreeDisk(@PathVariable("id") Long id) {
 
         try {
