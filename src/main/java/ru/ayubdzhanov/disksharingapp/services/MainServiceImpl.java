@@ -61,7 +61,7 @@ public class MainServiceImpl implements MainService {
     @Override
     public List<ControllerSupport> getAllDisksWhichWasTaken() {
 
-        List<Disk> takenDisks = diskDao.getDisksTakenByCurrentUser(currentUserId);
+        List<Disk> takenDisks = diskDao.getDisksWhichWasTakenFromUser(currentUserId);
         List<ControllerSupport> takenDiskWithUser = new LinkedList<>();
 
         takenDisks.forEach(disk -> {
@@ -82,7 +82,7 @@ public class MainServiceImpl implements MainService {
             throw new Exception("This disk is free");
         }
         if(!borrowedDisk.getTakenItems().getCurrentOwner().getId().equals(currentUserId)) {
-            throw new Exception("This disk belongs to another user");
+            throw new Exception("This disk was borrowed by another user");
         }
 
         TakenItems takenItems = takenItemsDao.findByDiskId(borrowedDisk.getId());
@@ -102,7 +102,7 @@ public class MainServiceImpl implements MainService {
 
         User user = userDao.findById(currentUserId);
 
-        if(freeDisk.getTakenItems().getCurrentOwner().getId().equals(user.getId())) {
+        if(freeDisk.getTakenItems().getOriginalOwner().getId().equals(user.getId())) {
             throw new Exception("Bro, chill. This disk is yours");
         }
 

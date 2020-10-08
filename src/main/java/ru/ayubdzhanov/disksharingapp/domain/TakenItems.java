@@ -56,6 +56,7 @@ public class TakenItems {
 
     public void setCurrentOwner(User currentOwner) {
         this.currentOwner = currentOwner;
+        if(currentOwner == null) isFree = true;
     }
 
     public Disk getDisk() {

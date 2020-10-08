@@ -16,6 +16,7 @@ public class Disk {
     private String name;
 
     @OneToOne(mappedBy = "disk")
+    @JsonIgnore
     private TakenItems takenItems;
 
     public Long getId() {

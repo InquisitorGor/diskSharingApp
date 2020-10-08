@@ -7,8 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class DiskSharingAppApplicationTests {
 
-    @Autowired
-    private DaoImpl dao;
+
 
 
     @Test

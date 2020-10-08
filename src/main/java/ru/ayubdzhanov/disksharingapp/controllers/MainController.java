@@ -27,7 +27,6 @@ import java.util.List;
 @RequestMapping("/user")
 public class MainController {
 
-
     private final MainService service;
 
     public MainController(MainService service) {
@@ -50,12 +49,12 @@ public class MainController {
         return ResponseEntity.ok(service.getAllFreeDisks());
     }
 
-    @GetMapping("/disks/taken_by_user")
+    @GetMapping("/disks/taken-by-user")
     public ResponseEntity<List<Disk>> getAllDisksTakenByUser() {
         return ResponseEntity.ok(service.getAllDisksTakenByUser());
     }
 
-    @GetMapping("/disks/taken_from_user")
+    @GetMapping("/disks/taken-from-user")
     public ResponseEntity<List<MainServiceImpl.ControllerSupport>> getAllDisksWhichWasTaken() {
         return ResponseEntity.ok(service.getAllDisksWhichWasTaken());
     }
