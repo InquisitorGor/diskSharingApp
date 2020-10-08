@@ -5,10 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.transaction.CannotCreateTransactionException;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.ayubdzhanov.disksharingapp.dao.CredentialDao;
 import ru.ayubdzhanov.disksharingapp.dao.DiskDao;
 import ru.ayubdzhanov.disksharingapp.dao.TakenItemsDao;
@@ -59,7 +56,7 @@ public class MainController {
         return ResponseEntity.ok(service.getAllDisksWhichWasTaken());
     }
 
-    @GetMapping("/disk/return/{id}")
+    @PutMapping("/disk/return/{id}")
     public ResponseEntity<?> giveBackDisk(@PathVariable("id") Long id) {
 
         try {
@@ -70,7 +67,7 @@ public class MainController {
         return ResponseEntity.ok(Collections.EMPTY_LIST);
     }
 
-    @GetMapping("/disk/take/{id}")
+    @PutMapping("/disk/take/{id}")
     public ResponseEntity<?> getFreeDisk(@PathVariable("id") Long id) {
 
         try {
