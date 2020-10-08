@@ -83,7 +83,7 @@ public class MainController {
         return ResponseEntity.ok(takenDiskWithUser);
     }
 
-    static class ControllerSupport {
+    public static class ControllerSupport {
         private Long id;
         private String name;
         private String realName;
