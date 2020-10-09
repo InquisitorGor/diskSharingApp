@@ -122,6 +122,7 @@ public class MainServiceImpl implements MainService {
         takenItemsDao.save(takenItems);
     }
 
+
     public void specifyCurrentUserId() {
         UserDetails credential = ((org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         String userName = null;

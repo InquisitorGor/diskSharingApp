@@ -72,7 +72,7 @@ public class MainController {
     }
 
     @ExceptionHandler(DiskOwnerException.class)
-    public ResponseEntity<?> handleExc(Exception ex){
+    public ResponseEntity<?> handleDiskOwnerException(Exception ex){
         return ResponseEntity.badRequest().body(ex.getMessage());
     }
 
