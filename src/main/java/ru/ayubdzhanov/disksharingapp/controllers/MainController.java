@@ -68,7 +68,7 @@ public class MainController {
     }
 
     @PutMapping("/disk/take/{id}")
-    public ResponseEntity<?> getFreeDisk(@PathVariable("id") Long id) {
+    public ResponseEntity<?> takeDisk(@PathVariable("id") Long id) {
 
         try {
             service.setDiskCurrentOwner(id);

@@ -16,7 +16,6 @@ public class TakenItemsDaoImpl implements TakenItemsDao {
     private EntityManager em;
 
     @Override
-    @Transactional
     public TakenItems save(TakenItems takenItems) {
         if (takenItems.getId() == null) {
             em.persist(takenItems);
@@ -27,7 +26,6 @@ public class TakenItemsDaoImpl implements TakenItemsDao {
     }
 
     @Override
-    @Transactional
     public TakenItems findByDiskId(Long id) {
         TypedQuery<TakenItems> list = em
                 .createQuery("SELECT t FROM TakenItems t " +

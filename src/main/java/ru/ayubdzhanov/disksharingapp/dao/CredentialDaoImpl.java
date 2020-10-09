@@ -25,7 +25,6 @@ public class CredentialDaoImpl implements CredentialDao {
     }
 
     @Override
-    @Transactional
     public Credential findByUsername(String username) {
         TypedQuery<Credential> list = em
                 .createQuery("SELECT c FROM Credential c " +

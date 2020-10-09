@@ -5,6 +5,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.CannotCreateTransactionException;
+import org.springframework.transaction.annotation.Transactional;
 import ru.ayubdzhanov.disksharingapp.controllers.MainController;
 import ru.ayubdzhanov.disksharingapp.dao.CredentialDao;
 import ru.ayubdzhanov.disksharingapp.dao.DiskDao;
@@ -39,26 +40,31 @@ public class MainServiceImpl implements MainService {
     }
 
     @Override
+    @Transactional
     public User getUserById() {
         return userDao.findById(currentUserId);
     }
 
     @Override
+    @Transactional
     public List<Disk> getAllUserDisks() {
         return diskDao.getDisks(currentUserId);
     }
 
     @Override
+    @Transactional
     public List<Disk> getAllFreeDisks() {
         return diskDao.getFreeDisks();
     }
 
     @Override
+    @Transactional
     public List<Disk> getAllDisksTakenByUser() {
         return diskDao.getDisksTakenByCurrentUser(currentUserId);
     }
 
     @Override
+    @Transactional
     public List<ControllerSupport> getAllDisksWhichWasTaken() {
 
         List<Disk> takenDisks = diskDao.getDisksWhichWasTakenFromUser(currentUserId);
@@ -76,6 +82,7 @@ public class MainServiceImpl implements MainService {
     }
 
     @Override
+    @Transactional
     public void freeDiskFromCurrentOwner(Long id) throws Exception{
         Disk borrowedDisk = diskDao.getDisk(id);
         if (borrowedDisk.getTakenItems().getCurrentOwner() == null) {
@@ -93,6 +100,7 @@ public class MainServiceImpl implements MainService {
     }
 
     @Override
+    @Transactional
     public void setDiskCurrentOwner(Long id) throws Exception{
         Disk freeDisk = diskDao.findFreeDisk(id);
 

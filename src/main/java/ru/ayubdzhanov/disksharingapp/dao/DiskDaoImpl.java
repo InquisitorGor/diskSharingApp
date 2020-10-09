@@ -17,7 +17,6 @@ public class DiskDaoImpl implements DiskDao {
     private EntityManager em;
 
     @Override
-    @Transactional
     public Disk save(Disk disk) {
         if (disk.getId() == null) {
             em.persist(disk);
@@ -28,7 +27,6 @@ public class DiskDaoImpl implements DiskDao {
     }
 
     @Override
-    @Transactional
     public List<Disk> getDisks(Long id) {
         TypedQuery<Disk> list = em
                 .createQuery("SELECT d FROM Disk d " +
@@ -40,7 +38,6 @@ public class DiskDaoImpl implements DiskDao {
     }
 
     @Override
-    @Transactional
     public List<Disk> getFreeDisks() {
         TypedQuery<Disk> list = em
                 .createQuery("SELECT d from Disk d " +
@@ -51,7 +48,6 @@ public class DiskDaoImpl implements DiskDao {
     }
 
     @Override
-    @Transactional
     public List<Disk> getDisksTakenByCurrentUser(Long id) {
         TypedQuery<Disk> list = em
                 .createQuery("SELECT d from Disk d " +
@@ -63,7 +59,6 @@ public class DiskDaoImpl implements DiskDao {
     }
 
     @Override
-    @Transactional
     public List<Disk> getDisksWhichWasTakenFromUser(Long id) {
         TypedQuery<Disk> list = em
                 .createQuery("SELECT d from Disk d " +
@@ -76,7 +71,6 @@ public class DiskDaoImpl implements DiskDao {
     }
 
     @Override
-    @Transactional
     public Disk findFreeDisk(Long id) {
         TypedQuery<Disk> list = em
                 .createQuery("SELECT d from Disk d " +
@@ -93,7 +87,6 @@ public class DiskDaoImpl implements DiskDao {
     }
 
     @Override
-    @Transactional
     public Disk getDisk(Long id) {
         TypedQuery<Disk> list = em
                 .createQuery("SELECT d from Disk d " +
