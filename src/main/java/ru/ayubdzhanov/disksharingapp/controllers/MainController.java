@@ -57,27 +57,23 @@ public class MainController {
     }
 
     @PutMapping("/disk/return/{id}")
-    public ResponseEntity<?> giveBackDisk(@PathVariable("id") Long id) {
+    public ResponseEntity<?> giveBackDisk(@PathVariable("id") Long id) throws Exception {
 
-        try {
-            service.freeDiskFromCurrentOwner(id);
-        } catch (Exception ex) {
-            return ResponseEntity.badRequest().body(ex.getMessage());
-        }
+        service.freeDiskFromCurrentOwner(id);
         return ResponseEntity.ok(Collections.EMPTY_LIST);
     }
 
     @PutMapping("/disk/take/{id}")
-    public ResponseEntity<?> takeDisk(@PathVariable("id") Long id) {
+    public ResponseEntity<?> takeDisk(@PathVariable("id") Long id) throws Exception {
 
-        try {
-            service.setDiskCurrentOwner(id);
-        } catch (Exception ex) {
-            return ResponseEntity.badRequest().body(ex.getMessage());
-        }
-
+        service.setDiskCurrentOwner(id);
         return ResponseEntity.ok(Collections.EMPTY_LIST);
 
+    }
+
+    @ExceptionHandler(DiskOwnerException.class)
+    public ResponseEntity<?> handleExc(Exception ex){
+        return ResponseEntity.badRequest().body(ex.getMessage());
     }
 
 }

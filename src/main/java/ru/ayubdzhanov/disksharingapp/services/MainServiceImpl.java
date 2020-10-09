@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.CannotCreateTransactionException;
 import org.springframework.transaction.annotation.Transactional;
+import ru.ayubdzhanov.disksharingapp.controllers.DiskOwnerException;
 import ru.ayubdzhanov.disksharingapp.controllers.MainController;
 import ru.ayubdzhanov.disksharingapp.dao.CredentialDao;
 import ru.ayubdzhanov.disksharingapp.dao.DiskDao;
@@ -86,10 +87,10 @@ public class MainServiceImpl implements MainService {
     public void freeDiskFromCurrentOwner(Long id) throws Exception{
         Disk borrowedDisk = diskDao.getDisk(id);
         if (borrowedDisk.getTakenItems().getCurrentOwner() == null) {
-            throw new Exception("This disk is free");
+            throw new DiskOwnerException("This disk is free");
         }
         if(!borrowedDisk.getTakenItems().getCurrentOwner().getId().equals(currentUserId)) {
-            throw new Exception("This disk was borrowed by another user");
+            throw new DiskOwnerException("This disk was borrowed by another user");
         }
 
         TakenItems takenItems = takenItemsDao.findByDiskId(borrowedDisk.getId());
@@ -105,13 +106,13 @@ public class MainServiceImpl implements MainService {
         Disk freeDisk = diskDao.findFreeDisk(id);
 
         if(freeDisk == null) {
-            throw new Exception("Hold ur horses. This disk is not free");
+            throw new DiskOwnerException("Hold ur horses. This disk is not free");
         }
 
         User user = userDao.findById(currentUserId);
 
         if(freeDisk.getTakenItems().getOriginalOwner().getId().equals(user.getId())) {
-            throw new Exception("Bro, chill. This disk is yours");
+            throw new DiskOwnerException("Bro, chill. This disk belongs to you");
         }
 
         TakenItems takenItems = takenItemsDao.findByDiskId(freeDisk.getId());
@@ -138,9 +139,6 @@ public class MainServiceImpl implements MainService {
         }
     }
 
-    public Long getCurrentUserId() {
-        return currentUserId;
-    }
 
     public static class ControllerSupport {
         private Long id;
