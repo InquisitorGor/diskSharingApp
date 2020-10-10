@@ -22,7 +22,6 @@ public interface MainService {
 
     void setDiskCurrentOwner(Long id) throws Exception;
 
-    void specifyCurrentUserId();
 
 
 

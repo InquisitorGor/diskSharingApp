@@ -1,6 +1,8 @@
 package ru.ayubdzhanov.disksharingapp.services;
 
+import org.springframework.context.ApplicationListener;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.event.InteractiveAuthenticationSuccessEvent;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -20,7 +22,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Service
-public class MainServiceImpl implements MainService {
+public class MainServiceImpl implements MainService, ApplicationListener<InteractiveAuthenticationSuccessEvent> {
 
     private final DiskDao diskDao;
 
@@ -122,9 +124,9 @@ public class MainServiceImpl implements MainService {
         takenItemsDao.save(takenItems);
     }
 
-
-    public void specifyCurrentUserId() {
-        UserDetails credential = ((org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+    @Override
+    public void onApplicationEvent(InteractiveAuthenticationSuccessEvent interactiveAuthenticationSuccessEvent) {
+        UserDetails credential = ((org.springframework.security.core.userdetails.User) interactiveAuthenticationSuccessEvent.getAuthentication().getPrincipal());
         String userName = null;
 
         if (credential != null) {
@@ -139,6 +141,7 @@ public class MainServiceImpl implements MainService {
             }
         }
     }
+
 
 
     public static class ControllerSupport {

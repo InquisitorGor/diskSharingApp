@@ -1,23 +1,12 @@
 package ru.ayubdzhanov.disksharingapp.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.transaction.CannotCreateTransactionException;
 import org.springframework.web.bind.annotation.*;
-import ru.ayubdzhanov.disksharingapp.dao.CredentialDao;
-import ru.ayubdzhanov.disksharingapp.dao.DiskDao;
-import ru.ayubdzhanov.disksharingapp.dao.TakenItemsDao;
-import ru.ayubdzhanov.disksharingapp.dao.UserDao;
 import ru.ayubdzhanov.disksharingapp.domain.Disk;
-import ru.ayubdzhanov.disksharingapp.domain.TakenItems;
-import ru.ayubdzhanov.disksharingapp.domain.User;
 import ru.ayubdzhanov.disksharingapp.services.MainService;
 import ru.ayubdzhanov.disksharingapp.services.MainServiceImpl;
 
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 
 @RestController
@@ -30,11 +19,6 @@ public class MainController {
         this.service = service;
     }
 
-    @GetMapping("/welcome")
-    public ResponseEntity<?> welcome() {
-        service.specifyCurrentUserId();
-        return ResponseEntity.ok("Добро пожаловать " + service.getUserById().getRealName());
-    }
 
     @GetMapping("/disks")
     public ResponseEntity<List<Disk>> getAllUserDisks() {
@@ -72,7 +56,7 @@ public class MainController {
     }
 
     @ExceptionHandler(DiskOwnerException.class)
-    public ResponseEntity<?> handleDiskOwnerException(Exception ex){
+    public ResponseEntity<?> handleDiskOwnerException(Exception ex) {
         return ResponseEntity.badRequest().body(ex.getMessage());
     }
 
