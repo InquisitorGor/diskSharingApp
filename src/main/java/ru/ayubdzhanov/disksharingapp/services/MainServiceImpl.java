@@ -2,6 +2,7 @@ package ru.ayubdzhanov.disksharingapp.services;
 
 import org.springframework.context.ApplicationListener;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
 import org.springframework.security.authentication.event.InteractiveAuthenticationSuccessEvent;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,7 +23,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Service
-public class MainServiceImpl implements MainService, ApplicationListener<InteractiveAuthenticationSuccessEvent> {
+public class MainServiceImpl implements MainService, ApplicationListener<AuthenticationSuccessEvent> {
 
     private final DiskDao diskDao;
 
@@ -124,9 +125,10 @@ public class MainServiceImpl implements MainService, ApplicationListener<Interac
         takenItemsDao.save(takenItems);
     }
 
+
     @Override
-    public void onApplicationEvent(InteractiveAuthenticationSuccessEvent interactiveAuthenticationSuccessEvent) {
-        UserDetails credential = ((org.springframework.security.core.userdetails.User) interactiveAuthenticationSuccessEvent.getAuthentication().getPrincipal());
+    public void onApplicationEvent(AuthenticationSuccessEvent authenticationSuccessEvent) {
+        UserDetails credential = ((org.springframework.security.core.userdetails.User) authenticationSuccessEvent.getAuthentication().getPrincipal());
         String userName = null;
 
         if (credential != null) {
