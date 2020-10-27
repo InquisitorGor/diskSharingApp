@@ -17,7 +17,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
-public class DaoTest {
+public class DiskDaoImplTest {
 
 
     @Autowired
