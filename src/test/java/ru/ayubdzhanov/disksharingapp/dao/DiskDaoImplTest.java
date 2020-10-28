@@ -9,8 +9,10 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.ayubdzhanov.disksharingapp.domain.Disk;
+import ru.ayubdzhanov.disksharingapp.domain.User;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.Assert.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -45,36 +47,37 @@ public class DiskDaoImplTest {
         List<Disk> secondUserDiskList = diskDao.getDisks(secondUserId);
 
         assertThat(firstUserDiskList.size()).isEqualTo(2);
-        assertThat(firstUserDiskList.stream()
+        Optional<Disk> firstDiskOfFirstUser = firstUserDiskList.stream()
                 .filter(
                         x -> x.getName().equals("Emperor's chosen")
-                ).findFirst()
-                .get()
+                ).findFirst();
+        firstDiskOfFirstUser.ifPresent(disk -> assertThat(disk
                 .getName())
-                .isEqualTo("Emperor's chosen");
-        assertThat(firstUserDiskList.stream()
+                .isEqualTo("Emperor's chosen"));
+        Optional<Disk> secondDiskOfFirstUser = firstUserDiskList.stream()
                 .filter(
                         x -> x.getName().equals("Eternal bliss")
-                ).findFirst()
-                .get()
+                ).findFirst();
+        secondDiskOfFirstUser.ifPresent(disk -> assertThat(disk
                 .getName())
-                .isEqualTo("Eternal bliss");
+                .isEqualTo("Eternal bliss"));
+
 
         assertThat(secondUserDiskList.size()).isEqualTo(2);
-        assertThat(secondUserDiskList.stream()
+        Optional<Disk> firstDiskOfSecondUser = secondUserDiskList.stream()
                 .filter(
                         x -> x.getName().equals("Seeking truth")
-                ).findFirst()
-                .get()
+                ).findFirst();
+        firstDiskOfSecondUser.ifPresent(disk -> assertThat(disk
                 .getName())
-                .isEqualTo("Seeking truth");
-        assertThat(secondUserDiskList.stream()
+                .isEqualTo("Seeking truth"));
+        Optional<Disk> secondDiskOfSecondUser = secondUserDiskList.stream()
                 .filter(
                         x -> x.getName().equals("Unknown hero")
-                ).findFirst()
-                .get()
+                ).findFirst();
+        secondDiskOfSecondUser.ifPresent(disk -> assertThat(disk
                 .getName())
-                .isEqualTo("Unknown hero");
+                .isEqualTo("Unknown hero"));
     }
 
     @Test
@@ -94,26 +97,26 @@ public class DiskDaoImplTest {
         List<Disk> secondUserDiskList = diskDao.getDisksTakenByCurrentUser(secondUserId);
 
         assertThat(firstUserDiskList.size()).isEqualTo(1);
-        assertThat(firstUserDiskList.stream()
+        Optional<Disk> firstDiskOfFirstUser = firstUserDiskList.stream()
                 .filter(
                         x -> x.getName().equals("Unknown hero")
-                ).findFirst()
-                .get()
+                ).findFirst();
+        firstDiskOfFirstUser.ifPresent(disk -> assertThat(disk
                 .getName())
-                .isEqualTo("Unknown hero");
+                .isEqualTo("Unknown hero"));
         firstUserDiskList.forEach(disk -> {
             assertThat(disk.getTakenItems().getCurrentOwner().getId()).isEqualTo(firstUserId);
             assertThat(disk.getTakenItems().getOriginalOwner().getId()).isNotEqualTo(firstUserId);
         });
 
         assertThat(secondUserDiskList.size()).isEqualTo(1);
-        assertThat(secondUserDiskList.stream()
+        Optional<Disk> firstDiskOfSecondUser = secondUserDiskList.stream()
                 .filter(
                         x -> x.getName().equals("Eternal bliss")
-                ).findFirst()
-                .get()
+                ).findFirst();
+        firstDiskOfSecondUser.ifPresent(disk -> assertThat(disk
                 .getName())
-                .isEqualTo("Eternal bliss");
+                .isEqualTo("Eternal bliss"));
         secondUserDiskList.forEach(disk -> {
             assertThat(disk.getTakenItems().getCurrentOwner().getId()).isEqualTo(secondUserId);
             assertThat(disk.getTakenItems().getOriginalOwner().getId()).isNotEqualTo(secondUserId);
@@ -127,26 +130,28 @@ public class DiskDaoImplTest {
 
 
         assertThat(firstUserDiskList.size()).isEqualTo(1);
-        assertThat(firstUserDiskList.stream()
+
+        Optional<Disk> secondDiskOfFirstUser = firstUserDiskList.stream()
                 .filter(
                         x -> x.getName().equals("Eternal bliss")
-                ).findFirst()
-                .get()
+                ).findFirst();
+        secondDiskOfFirstUser.ifPresent(disk -> assertThat(disk
                 .getName())
-                .isEqualTo("Eternal bliss");
+                .isEqualTo("Eternal bliss"));
         firstUserDiskList.forEach(disk -> {
             assertThat(disk.getTakenItems().getCurrentOwner().getId()).isNotEqualTo(firstUserId);
             assertThat(disk.getTakenItems().getOriginalOwner().getId()).isEqualTo(firstUserId);
         });
 
         assertThat(secondUserDiskList.size()).isEqualTo(1);
-        assertThat(secondUserDiskList.stream()
+
+        Optional<Disk> secondDiskOfSecondUser = secondUserDiskList.stream()
                 .filter(
                         x -> x.getName().equals("Unknown hero")
-                ).findFirst()
-                .get()
+                ).findFirst();
+        secondDiskOfSecondUser.ifPresent(disk -> assertThat(disk
                 .getName())
-                .isEqualTo("Unknown hero");
+                .isEqualTo("Unknown hero"));
         secondUserDiskList.forEach(disk -> {
             assertThat(disk.getTakenItems().getCurrentOwner().getId()).isNotEqualTo(secondUserId);
             assertThat(disk.getTakenItems().getOriginalOwner().getId()).isEqualTo(secondUserId);
