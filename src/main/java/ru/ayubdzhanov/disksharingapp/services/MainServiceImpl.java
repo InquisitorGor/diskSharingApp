@@ -23,7 +23,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Service
-public class MainServiceImpl implements MainService, ApplicationListener<AuthenticationSuccessEvent> {
+public class MainServiceImpl implements MainService {
 
     private final DiskDao diskDao;
 
@@ -32,8 +32,6 @@ public class MainServiceImpl implements MainService, ApplicationListener<Authent
     private final TakenItemsDao takenItemsDao;
 
     private final CredentialDao credentialDao;
-
-    private Long currentUserId;
 
 
     public MainServiceImpl(DiskDao diskDao, UserDao userDao, TakenItemsDao takenItemsDao, CredentialDao credentialDao) {
@@ -46,13 +44,13 @@ public class MainServiceImpl implements MainService, ApplicationListener<Authent
     @Override
     @Transactional
     public User getUserById() {
-        return userDao.findById(currentUserId);
+        return userDao.findById(getCurrentUserId());
     }
 
     @Override
     @Transactional
     public List<Disk> getAllUserDisks() {
-        return diskDao.getDisks(currentUserId);
+        return diskDao.getDisks(getCurrentUserId());
     }
 
     @Override
@@ -64,14 +62,14 @@ public class MainServiceImpl implements MainService, ApplicationListener<Authent
     @Override
     @Transactional
     public List<Disk> getAllDisksTakenByUser() {
-        return diskDao.getDisksTakenByCurrentUser(currentUserId);
+        return diskDao.getDisksTakenByCurrentUser(getCurrentUserId());
     }
 
     @Override
     @Transactional
     public List<ControllerSupport> getAllDisksWhichWasTaken() {
 
-        List<Disk> takenDisks = diskDao.getDisksWhichWasTakenFromUser(currentUserId);
+        List<Disk> takenDisks = diskDao.getDisksWhichWasTakenFromUser(getCurrentUserId());
         List<ControllerSupport> takenDiskWithUser = new LinkedList<>();
 
         takenDisks.forEach(disk -> {
@@ -92,7 +90,7 @@ public class MainServiceImpl implements MainService, ApplicationListener<Authent
         if (borrowedDisk.getTakenItems().getCurrentOwner() == null) {
             throw new DiskOwnerException("This disk is free");
         }
-        if(!borrowedDisk.getTakenItems().getCurrentOwner().getId().equals(currentUserId)) {
+        if(!borrowedDisk.getTakenItems().getCurrentOwner().getId().equals(getCurrentUserId())) {
             throw new DiskOwnerException("This disk was borrowed by another user");
         }
 
@@ -112,7 +110,7 @@ public class MainServiceImpl implements MainService, ApplicationListener<Authent
             throw new DiskOwnerException("Hold ur horses. This disk is not free");
         }
 
-        User user = userDao.findById(currentUserId);
+        User user = userDao.findById(getCurrentUserId());
 
         if(freeDisk.getTakenItems().getOriginalOwner().getId().equals(user.getId())) {
             throw new DiskOwnerException("Bro, chill. This disk belongs to you");
@@ -126,22 +124,23 @@ public class MainServiceImpl implements MainService, ApplicationListener<Authent
     }
 
 
-    @Override
-    public void onApplicationEvent(AuthenticationSuccessEvent authenticationSuccessEvent) {
-        UserDetails credential = ((org.springframework.security.core.userdetails.User) authenticationSuccessEvent.getAuthentication().getPrincipal());
-        String userName = null;
 
+    public Long getCurrentUserId() {
+        UserDetails credential = ((org.springframework.security.core.userdetails.User)
+                SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        String userName;
+        Long currentUserId = null;
         if (credential != null) {
 
             userName = credential.getUsername();
-
             try {
-                this.currentUserId = credentialDao.findByUsername(userName)
+                currentUserId = credentialDao.findByUsername(userName)
                         .getId();
             } catch (CannotCreateTransactionException ignored) {
                 System.out.println("Something went wrong");
             }
         }
+        return currentUserId;
     }
 
 
